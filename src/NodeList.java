@@ -34,7 +34,7 @@ public class NodeList {
 		return current.data;
 	}
 
-	// get NodeList length
+	// get NodeList length (NOT AVALIABLE for NodeList with circle)
 	public static int getLength(Node head) {
 		if (head == null)
 			return 0;
@@ -182,9 +182,64 @@ public class NodeList {
 		}
 	}
 
+	// find the length of the circle if there is a circle in the length
+	public static int getCircleLength(Node head) {
+		if (!hasCircle(head))
+			return -1;
+		Node slowNode = head;
+		Node fastNode = head;
+		Node circleNode = new Node();
+		int lengthOfCircle = 1;
+		while (fastNode != null) {
+			slowNode = slowNode.next;
+			fastNode = fastNode.next.next;
+			if (slowNode == fastNode) {
+				circleNode = slowNode;
+				break;
+			}
+		}
+		Node circleNodeNext = circleNode.next;
+		while (circleNode != circleNodeNext) {
+			lengthOfCircle++;
+			circleNodeNext = circleNodeNext.next;
+		}
+		return lengthOfCircle;
+	}
+
+	// find the first node of the circle
+	public static Node getFirstNodeOfCircle(Node head) {
+		Node slowNode = head;
+		Node fastNode = head;
+		int circleLength = getCircleLength(head);
+		for (int i = 0; i < circleLength; i++)
+			fastNode = fastNode.next;
+		if (slowNode == fastNode)
+			return head;
+		else {
+			while (fastNode != null) {
+				slowNode = slowNode.next;
+				fastNode = fastNode.next;
+				if (slowNode == fastNode)
+					return slowNode;
+			}
+		}
+		return new Node(-1);
+	}
+
 	// main
 	public static void main(String[] args) {
 		int[] array1 = { 1, 3, 5, 7, 9, 11 };
-
+		int[] array2 = { 2, 4, 6};
+		Node a = new Node(1);
+		Node b = new Node(2);
+		Node c = new Node(3);
+		Node d = new Node(4);
+		Node e = new Node(5);
+		a.next = b;
+		b.next = c;
+		c.next = d;
+		d.next = e;
+		e.next = b;
+		System.out.println(getData(getFirstNodeOfCircle(a)));
 	}
 }

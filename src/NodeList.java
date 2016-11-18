@@ -121,7 +121,7 @@ public class NodeList {
 		else {
 			Node resultNode = new Node();
 			Node current = resultNode;
-			while (head1 != null & head2 != null) {
+			while (head1 != null && head2 != null) {
 				if (head1.data >= head2.data) {
 					current.next = head2;
 					head2 = head2.next;
@@ -144,7 +144,7 @@ public class NodeList {
 	public static boolean hasCircle(Node head) {
 		Node slowNode = head;
 		Node fastNode = head;
-		while (slowNode != null && fastNode != null) {
+		while (fastNode != null && fastNode.next != null) {
 			slowNode = slowNode.next;
 			fastNode = fastNode.next.next;
 			if (slowNode == fastNode)
@@ -226,10 +226,37 @@ public class NodeList {
 		return new Node(-1);
 	}
 
+	// remove the nth node from the end
+	public static Node removeNthFromEnd(Node head, int n) {
+		if (head == null)
+			return null;
+		if (head.next == null)
+			return null;
+		Node slow = head;
+		Node fast = head;
+		Node prev = null;
+		for (int i = 0; i < n; i++)
+			fast = fast.next;
+		while (fast != null) {
+			prev = slow;
+			slow = slow.next;
+			fast = fast.next;
+		}
+		if (slow.next == null)
+			prev.next = null;
+		else {
+			slow.data = slow.next.data;
+			slow.next = slow.next.next;
+		}
+		return head;
+	}
+
 	// main
 	public static void main(String[] args) {
 		int[] array1 = { 1, 3, 5, 7, 9, 11 };
-		int[] array2 = { 2, 4, 6};
+		int[] array2 = { 2, 4, 6 };
+		Node head1 = buildList(array1);
+		Node head2 = buildList(array2);
 		Node a = new Node(1);
 		Node b = new Node(2);
 		Node c = new Node(3);
